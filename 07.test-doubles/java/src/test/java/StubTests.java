@@ -4,30 +4,29 @@ import stub.Calculator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class StubTests {
     @Test
     void shouldDivideWhenAuthorizationIsAccepted() {
-        var calculator = new Calculator(new AllowAccessAuthorizer());
+        var authorizer = mock(Authorizer.class);
+        when(authorizer.authorize()).thenReturn(true);
+
+        var calculator = new Calculator(authorizer);
 
         assertThat(calculator.divide(9, 3)).isEqualTo(3);
     }
 
     @Test
     void shouldThrowWhenAuthorizationIsDenied() {
-        var calculator = new Calculator(new DenyAccessAuthorizer());
+
+        var authorizer = mock(Authorizer.class);
+        when(authorizer.authorize()).thenReturn(false);
+
+        var calculator = new Calculator(authorizer);
 
         assertThatThrownBy(() -> calculator.divide(9, 3))
                 .isInstanceOf(SecurityException.class);
-    }
-
-    static class AllowAccessAuthorizer implements Authorizer {
-        @Override
-        public boolean authorize() { return true; }
-    }
-
-    static class DenyAccessAuthorizer implements Authorizer {
-        @Override
-        public boolean authorize() { return false; }
     }
 }
