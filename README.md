@@ -22,4 +22,4 @@ cargo install mdbook
 mdbook serve --open
 ```
 
-Le site sera disponible sur [http://localhost:3000](http://localhost:3000).
+Le site sera disponible sur [http://localhost:3000](http://localhost:3000).# crafting-code-b2
